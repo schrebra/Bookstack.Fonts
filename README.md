@@ -66,7 +66,7 @@ BookStack's security headers will block local fonts unless they are whitelisted 
 2. Go to **Settings** > **Customization**.
 3. Locate the **Custom HTML Head Content** text area and paste the following block:
 
-```
+```css
 <script>
     window.addEventListener('library-cm6::configure-theme', (event) => {
         const {EditorView} = event.detail;
@@ -78,7 +78,6 @@ BookStack's security headers will block local fonts unless they are whitelisted 
                 borderRadius: "10px !important",
                 overflow: "hidden !important",
                 boxShadow: "0 2px 8px rgba(0, 0, 0, 0.12)",
-                /* Sets font size for the editor interface */
                 fontSize: "14px"
             },
             
@@ -91,29 +90,46 @@ BookStack's security headers will block local fonts unless they are whitelisted 
 
             ".cm-gutters": { 
                 backgroundColor: "#2e3440", 
-                color: "#d8dee9",           
+                /* FIX: Line numbers set to pure white */
+                color: "#ffffff !important",           
                 borderRight: "1px solid #4c566a", 
-                minWidth: "45px", /* Slightly wider for larger numbers */
+                minWidth: "45px",
                 borderTopLeftRadius: "10px",
                 borderBottomLeftRadius: "10px"
             },
+
+            /* Specific target for the line number text */
+            ".cm-gutterElement": {
+                color: "#ffffff !important",
+                opacity: "1 !important"
+            },
             
             ".cm-activeLine": { backgroundColor: "#3b4252" },
-            ".cm-cursor": { borderLeftColor: "#ffffff" }
+            ".cm-activeLineGutter": { backgroundColor: "#3b4252", color: "#ffffff" },
+
+            /* FIX: Selection visibility (Darker grey so light text pops) */
+            ".cm-selectionBackground, ::selection": { 
+                backgroundColor: "#4c566a !important" 
+            },
+
+            ".cm-cursor": { 
+                borderLeftColor: "#00ffcc", 
+                borderLeftWidth: "2px" 
+            }
         }));
 
         event.detail.registerHighlightStyle((t) => [
-            {tag: t.keyword, color: "#81a1c1", fontWeight: "bold"},
-            {tag: t.string, color: "#a3be8c"},
-            {tag: t.comment, color: "#9ca3af", fontStyle: "italic"},
-            {tag: t.number, color: "#b48ead"},
-            {tag: [t.atom, t.bool, t.url], color: "#88c0d0"},
-            {tag: [t.variableName, t.definition(t.variableName)], color: "#88c0d0"},
-            {tag: [t.propertyName, t.definition(t.propertyName)], color: "#ebcb8b"},
-            {tag: t.function(t.variableName), color: "#8fbcbb"},
-            {tag: t.className, color: "#8fbcbb"},
-            {tag: t.meta, color: "#d08770"},
-            {tag: t.operator, color: "#81a1c1"}
+            {tag: t.keyword, color: "#5eead4", fontWeight: "bold"}, // Vibrant Turquoise
+            {tag: t.string, color: "#bef264"}, // Vibrant Lime
+            {tag: t.comment, color: "#94a3b8", fontStyle: "italic"},
+            {tag: t.number, color: "#f472b6"}, // Vibrant Pink
+            {tag: [t.atom, t.bool, t.url], color: "#7dd3fc"}, // Bright Blue
+            {tag: [t.variableName, t.definition(t.variableName)], color: "#7dd3fc"}, 
+            {tag: [t.propertyName, t.definition(t.propertyName)], color: "#fbbf24"}, // Bright Gold
+            {tag: t.function(t.variableName), color: "#60a5fa"}, 
+            {tag: t.className, color: "#22d3ee"}, 
+            {tag: t.meta, color: "#fb923c"}, // Bright Orange
+            {tag: t.operator, color: "#5eead4"}
         ]);
     });
 </script>
@@ -128,11 +144,17 @@ BookStack's security headers will block local fonts unless they are whitelisted 
         --font-code: 'JetBrains Mono', monospace;
     }
 
+    /* FIX: Global Selection/Highlighting visibility */
+    ::selection {
+        background-color: #4c566a !important;
+        color: #ffffff !important;
+    }
+
     /* 2. Static Block Styling */
     body .page-content pre, 
     body .page-content .cm-editor {
         font-family: 'JetBrains Mono', monospace !important;
-        font-size: 14px !important; /* Larger font size */
+        font-size: 14px !important;
         background-color: #2e3440 !important;
         border-radius: 10px !important;
         overflow: hidden !important; 
@@ -141,24 +163,31 @@ BookStack's security headers will block local fonts unless they are whitelisted 
         padding: 0 !important;
     }
 
-    /* Padding fix for the text inside static blocks */
+    /* Padding and Text color for code blocks */
     body .page-content pre code {
         display: block;
-        padding: 20px !important; /* Increased padding slightly for larger font */
+        padding: 20px !important;
         border-radius: 10px !important;
         font-family: 'JetBrains Mono', monospace !important;
         line-height: 1.6 !important;
+        color: #eceff4 !important;
+    }
+
+    /* FIX: Force white line numbers in static view */
+    .codeblock-line-numbers {
+        color: #ffffff !important;
+        border-right: 1px solid #4c566a !important;
     }
 
     /* 3. Inline Code Styling */
     body .page-content p > code, body .page-content li > code {
-        background-color: #e5e9f0 !important;
-        color: #bf616a !important;
-        padding: 2px 5px !important;
+        background-color: #3b4252 !important; /* Darker to match theme */
+        color: #5eead4 !important; /* Vibrant Turquoise */
+        padding: 2px 6px !important;
         border-radius: 4px !important;
-        border: 1px solid #d8dee9 !important;
+        border: 1px solid #4c566a !important;
         font-family: 'JetBrains Mono', monospace !important;
-        font-size: 0.95em !important; /* Scaled slightly for inline text flow */
+        font-size: 0.95em !important;
         font-weight: 600 !important;
     }
 
