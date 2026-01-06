@@ -90,15 +90,21 @@ BookStack's security headers will block local fonts unless they are whitelisted 
       font-style: normal;
     }
 
-    /* 4. Apply to BookStack Variables */
+    /* 4. Apply to BookStack Variables & Global Body */
     :root {
         --font-body: 'Figtree', 'Google Sans', sans-serif;
         --font-code: 'JetBrains Mono', monospace;
     }
 
-    /* Force the editor and code blocks to use JetBrains Mono */
+    /* Sets the standard text size for the application */
+    body {
+        font-size: 16px !important;
+    }
+
+    /* Force the editor and code blocks to use JetBrains Mono at 16px */
     code, pre, .CodeMirror, .cm-editor {
         font-family: 'JetBrains Mono', monospace !important;
+        font-size: 14px !important;
     }
 </style>
 ```
